@@ -6,6 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Estudio Agrimensor{% endblock %}</title>
     
+    <!-- Variables globales -->
+    <link rel="stylesheet" href="{% static 'css/variables.css' %}">
+    <!-- Estilos base -->
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,9 +18,9 @@
     
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    
-    <link rel="stylesheet" href="{% static 'css/variables.css' %}">
-    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+
+    <!-- Bloque para CSS específico de cada vista -->
+    {% block extra_css %}{% endblock %}
 </head>
 <body>
     <header class="site-header">
@@ -63,7 +68,6 @@
     </footer>
 
     <script>
-        // Initialize Lucide icons
         lucide.createIcons();
     </script>
     
