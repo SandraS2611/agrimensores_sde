@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Lista de Planos - Estudio Agrimensor{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/lista_planos.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="header">
+        <div>
+            <h1>Planos de Agrimensura</h1>
+            <p class="subtitle">Sistema de Gestión de Memorias</p>
+        </div>
+        <a href="{% url 'upload_plano' %}" class="btn-upload">
+            <i data-lucide="upload" style="width: 18px; height: 18px;"></i>
+            Cargar Nuevo Plano
+        </a>
+    </div>
+
+    {% if planos %}
+    <div class="planos-grid">
+        {% for plano in planos %}
+        <div class="plano-card">
+            <div class="plano-title">{{ plano.titulo }}</div>
+
+            <div class="plano-info">
+                <i data-lucide="calendar" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle; margin-right: 4px;"></i>
+                <strong>Fecha:</strong> {{ plano.fecha_carga|date:"d/m/Y H:i" }}
+            </div>
+
+            {% if plano.usuario %}
+            <div class="plano-info">
+                <i data-lucide="user" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle; margin-right: 4px;"></i>
+                <strong>Usuario:</strong> {{ plano.usuario.username }}
+            </div>
+            {% endif %}
+
+            <div>
+                <span class="estado-badge estado-{{ plano.estado }}">
+                    {% if plano.estado == 'pendiente' %}
+                        <i data-lucide="clock" style="width: 12px; height: 12px;"></i> Pendiente
+                    {% elif plano.estado == 'procesando' %}
+                        <i data-lucide="loader-2" style="width: 12px; height: 12px;"></i> Procesando
+                    {% elif plano.estado == 'completado' %}
+                        <i data-lucide="check-circle" style="width: 12px; height: 12px;"></i> Completado
+                    {% elif plano.estado == 'error' %}
+                        <i data-lucide="alert-circle" style="width: 12px; height: 12px;"></i> Error
+                    {% endif %}
+                </span>
+            </div>
+
+            {% if plano.descripcion %}
+            <div class="plano-info" style="margin-top: 12px;">
+                {{ plano.descripcion|truncatewords:15 }}
+            </div>
+            {% endif %}
+
+            <div class="plano-actions">
+                <a href="{% url 'detalle_plano' plano.id %}" class="btn btn-primary">
+                    <i data-lucide="eye" style="width: 14px; height: 14px;"></i>
+                    Ver Detalle
+                </a>
+                <a href="{% url 'descargar_memoria' plano.id %}" class="btn btn-secondary">
+                    <i data-lucide="file-text" style="width: 14px; height: 14px;"></i>
+                    Word
+                </a>
+                <a href="{% url 'descargar_memoria_pdf' plano.id %}" class="btn btn-secondary">
+                    <i data-lucide="file" style="width: 14px; height: 14px;"></i>
+                    PDF
+                </a>
+                <a href="{% url 'subir_memoria_drive' plano.id %}" class="btn btn-secondary">
+                    <i data-lucide="cloud-upload" style="width: 14px; height: 14px;"></i>
+                    Drive
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-state-icon">
+            <i data-lucide="folder-open" style="width: 64px; height: 64px; color: var(--accent-primary);"></i>
+        </div>
+        <h2>No hay planos cargados</h2>
+        <p>Comienza cargando tu primer plano de mensura</p>
+        <a href="{% url 'upload_plano' %}" class="btn-upload">
+            <i data-lucide="plus" style="width: 18px; height: 18px;"></i>
+            Cargar Primer Plano
+        </a>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+    // Reinitialize Lucide icons for this template
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    }
+</script>
+{% endblock %}

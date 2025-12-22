@@ -1,0 +1,131 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estudio Agrimensor - Login</title>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+
+    <!-- Fuentes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    
+</head>
+<body>
+    <!-- Background Grid -->
+    <div class="background-grid"></div>
+
+    <!-- Floating Elements -->
+    <div class="floating-elements">
+        <div class="topo-circle"></div>
+        <div class="topo-circle"></div>
+        <div class="topo-circle"></div>
+        <div class="topo-circle"></div>
+        <div class="topo-circle"></div>
+        
+        <div class="floating-icon map-pin">
+            <i data-lucide="map-pin" style="width: 32px; height: 32px;"></i>
+        </div>
+        <div class="floating-icon mountain">
+            <i data-lucide="mountain" style="width: 48px; height: 48px;"></i>
+        </div>
+        <div class="floating-icon crosshair">
+            <i data-lucide="crosshair" style="width: 40px; height: 40px;"></i>
+        </div>
+    </div>
+
+    <!-- Main Card Container -->
+    <div class="card-container">
+        <div class="card-shadow-1"></div>
+        <div class="card-shadow-2"></div>
+        
+        <div class="login-card">
+            <div class="glow-border"></div>
+            
+            <!-- Corner Decorations -->
+            <div class="corner corner-tl"></div>
+            <div class="corner corner-tr"></div>
+            <div class="corner corner-bl"></div>
+            <div class="corner corner-br"></div>
+            
+            <!-- Header -->
+            <div class="card-header">
+                <div class="logo-container">
+                    <div class="logo-box">
+                        <i data-lucide="layers"></i>
+                    </div>
+                </div>
+                <h1 class="card-title">ESTUDIO AGRIMENSOR</h1>
+                <p class="card-subtitle">Sistema de Gestión de Memorias</p>
+            </div>
+            
+            <!-- Form -->
+            <!-- Django: {% csrf_token %} debe ir dentro del form -->
+            <form class="login-form" method="post" action="{% url 'login' %}">
+                {% csrf_token %}
+                
+                <div class="form-inner">
+                    <!-- Username Field -->
+                    <div class="form-group">
+                        <label class="form-label" for="username">Identificador</label>
+                        <div class="input-wrapper">
+                            <input 
+                                type="text" 
+                                id="username" 
+                                name="username"
+                                class="form-input" 
+                                placeholder="usuario@dominio"
+                                required
+                            >
+                            <span class="input-indicator"></span>
+                        </div>
+                    </div>
+                    
+                    <!-- Password Field -->
+                    <div class="form-group">
+                        <label class="form-label" for="password">Clave de Acceso</label>
+                        <div class="input-wrapper">
+                            <input 
+                                type="password" 
+                                id="password" 
+                                name="password"
+                                class="form-input" 
+                                placeholder="••••••••"
+                                required
+                            >
+                            <button type="button" class="toggle-password" onclick="togglePassword()">
+                                <i data-lucide="eye" id="eye-icon"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Submit Button -->
+                <button type="submit" class="submit-btn">
+                    <span>Acceder al Sistema</span>
+                    <div class="btn-shine"></div>
+                </button>
+                
+                <!-- Footer -->
+                <div class="card-footer">
+                    <span>v3.2.1</span>
+                    <div class="status-indicator">
+                        <span class="status-dot"></span>
+                        <span>Conexión segura</span>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Ground Reflection -->
+    <div class="ground-reflection"></div>
+
+    <script src="{% static 'js/login.js' %}"></script>
+</body>
+</html>

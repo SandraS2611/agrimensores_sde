@@ -1,0 +1,172 @@
+/* detalle_plano.css */
+
+/* Fuentes y base */
+body {
+    font-family: 'JetBrains Mono', monospace;
+    background: #0d0d0d;
+    color: #eaeaea;
+    margin: 0;
+    padding: 0;
+}
+
+/* Contenedor principal */
+.container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 20px;
+    position: relative;
+}
+
+/* Botón volver */
+.back-button {
+    display: inline-block;
+    margin-bottom: 20px;
+    color: #00e0ff;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+.back-button:hover {
+    color: #ff00ff;
+}
+
+/* Card estilo login */
+.card {
+    background: rgba(20, 20, 20, 0.95);
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 30px;
+    position: relative;
+    box-shadow: 0 0 25px rgba(0, 224, 255, 0.2);
+    overflow: hidden;
+}
+.card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: 2px solid transparent;
+    border-radius: 12px;
+    background: linear-gradient(45deg, #00e0ff, #ff00ff, #00ff9d) border-box;
+    -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: destination-out;
+    mask-composite: exclude;
+    pointer-events: none;
+}
+
+/* Header */
+.header h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2rem;
+    margin: 0;
+    color: #00e0ff;
+}
+.estado-badge {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+.estado-pendiente { background: #444; color: #ccc; }
+.estado-procesando { background: #0066ff; color: #fff; }
+.estado-completado { background: #00b894; color: #fff; }
+.estado-error { background: #d63031; color: #fff; }
+
+/* Secciones */
+.info-section {
+    margin-top: 30px;
+}
+.info-section h2 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.4rem;
+    color: #ff00ff;
+    margin-bottom: 15px;
+}
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #333;
+}
+.info-label {
+    font-weight: 600;
+    color: #aaa;
+}
+.info-value {
+    color: #eaeaea;
+}
+
+/* Texto extraído */
+.texto-extraido {
+    background: #111;
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #ccc;
+}
+
+/* Datos procesados */
+.datos-json {
+    background: #111;
+    padding: 15px;
+    border-radius: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9rem;
+    color: #00ff9d;
+    white-space: pre-wrap;
+}
+
+/* Alerts */
+.alert {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    font-weight: 500;
+}
+.alert-info {
+    background: rgba(0, 224, 255, 0.1);
+    border: 1px solid #00e0ff;
+    color: #00e0ff;
+}
+.alert-warning {
+    background: rgba(255, 0, 0, 0.1);
+    border: 1px solid #ff0033;
+    color: #ff0033;
+}
+
+/* Botones */
+.actions {
+    margin-top: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+.btn {
+    padding: 12px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s;
+}
+.btn:hover {
+    transform: translateY(-2px);
+}
+.btn::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(255,255,255,0.2), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.5s;
+}
+.btn:hover::after {
+    transform: translateX(100%);
+}
+.btn-primary { background: #0066ff; color: #fff; }
+.btn-success { background: #00b894; color: #fff; }
+.btn-secondary { background: #ff00ff; color: #fff; }
+.btn-danger { background: #d63031; color: #fff; }

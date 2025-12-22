@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Cargar Plano - Estudio Agrimensor{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/upload_plano.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="upload-page">
+  <div class="grid-decoration"></div>
+  
+  <div class="upload-container">
+    <!-- 3D Shadow layers -->
+    <div class="shadow-layer shadow-layer-1"></div>
+    <div class="shadow-layer shadow-layer-2"></div>
+    <div class="shadow-layer shadow-layer-3"></div>
+    
+    <!-- Main card -->
+    <div class="upload-card">
+      <!-- Header -->
+      <div class="upload-header">
+        <div class="upload-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="17 8 12 3 7 8" />
+            <line x1="12" y1="3" x2="12" y2="15" />
+          </svg>
+        </div>
+        <h2>Cargar Plano de Mensura</h2>
+        <p>Suba su archivo PDF para procesamiento</p>
+      </div>
+
+      {% if messages %}
+      <div class="messages">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <form method="post" enctype="multipart/form-data" id="uploadForm">
+        {% csrf_token %}
+
+        <div class="form-group">
+          <label for="titulo">Título del Plano *</label>
+          <input
+            type="text"
+            id="titulo"
+            name="titulo"
+            required
+            placeholder="Ej: Mensura Lote 15 - Dto. Capital"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Archivo PDF *</label>
+          <div class="file-upload" id="dropZone">
+            <div class="file-icon"></div>
+            <div class="file-text">
+              <strong>Haz clic para seleccionar</strong> o arrastra el archivo aquí
+              <br /><small>Formato: PDF | Tamaño máximo: 10MB</small>
+            </div>
+            <div class="file-name" id="fileName"></div>
+            <input
+              type="file"
+              id="archivo_pdf"
+              name="archivo_pdf"
+              accept=".pdf"
+              required
+            />
+          </div>
+        </div>
+
+        <button type="submit" class="submit-btn">
+          <span>Subir y Procesar Plano</span>
+        </button>
+      </form>
+
+      {% comment %} <a href="{% url 'dashboard' %}" class="back-link">← Volver al Dashboard</a> {% endcomment %}
+    </div>
+  </div>
+</div>
+
+<script src="{% static 'js/upload_plano.js' %}"></script>
+
+{% endblock %}

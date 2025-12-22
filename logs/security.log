@@ -1,0 +1,28 @@
+WARNING 2025-12-16 11:58:16,694 log 11296 7960 Forbidden (CSRF token from POST incorrect.): /admin/login/
+ERROR 2025-12-21 14:02:17,166 log 10976 10508 Invalid HTTP_HOST header: 'assistant-adrian-platinum-processed.trycloudflare.com'. You may need to add 'assistant-adrian-platinum-processed.trycloudflare.com' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "C:\Users\Lohany\Documents\agrimensores_sde\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Lohany\Documents\agrimensores_sde\.venv\Lib\site-packages\django\utils\deprecation.py", line 308, in __call__
+    response = self.process_request(request)
+  File "C:\Users\Lohany\Documents\agrimensores_sde\.venv\Lib\site-packages\django\middleware\common.py", line 48, in process_request
+    host = request.get_host()
+  File "C:\Users\Lohany\Documents\agrimensores_sde\.venv\Lib\site-packages\django\http\request.py", line 205, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: 'assistant-adrian-platinum-processed.trycloudflare.com'. You may need to add 'assistant-adrian-platinum-processed.trycloudflare.com' to ALLOWED_HOSTS.
+ERROR 2025-12-21 14:02:18,384 log 10976 8484 Invalid HTTP_HOST header: 'assistant-adrian-platinum-processed.trycloudflare.com'. You may need to add 'assistant-adrian-platinum-processed.trycloudflare.com' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "C:\Users\Lohany\Documents\agrimensores_sde\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Lohany\Documents\agrimensores_sde\.venv\Lib\site-packages\django\utils\deprecation.py", line 308, in __call__
+    response = self.process_request(request)
+  File "C:\Users\Lohany\Documents\agrimensores_sde\.venv\Lib\site-packages\django\middleware\common.py", line 48, in process_request
+    host = request.get_host()
+  File "C:\Users\Lohany\Documents\agrimensores_sde\.venv\Lib\site-packages\django\http\request.py", line 205, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: 'assistant-adrian-platinum-processed.trycloudflare.com'. You may need to add 'assistant-adrian-platinum-processed.trycloudflare.com' to ALLOWED_HOSTS.
+WARNING 2025-12-21 16:54:11,860 log 8200 13444 Forbidden (CSRF token from POST incorrect.): /
+WARNING 2025-12-21 16:54:14,979 log 8200 13444 Forbidden (CSRF token from POST incorrect.): /
+WARNING 2025-12-22 02:04:01,626 log 11616 3800 Forbidden (CSRF token from POST incorrect.): /
+WARNING 2025-12-22 02:04:05,616 log 11616 3800 Forbidden (CSRF token from POST incorrect.): /
+WARNING 2025-12-22 02:04:45,157 log 11616 3800 Forbidden (CSRF token from POST incorrect.): /

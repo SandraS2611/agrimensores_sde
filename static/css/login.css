@@ -1,0 +1,472 @@
+        /* ============================================
+           VARIABLES CSS
+           ============================================ */
+        :root {
+            --slate-900: #0f172a;
+            --slate-800: #1e293b;
+            --slate-500: #64748b;
+            --emerald-950: #022c22;
+            --emerald-900: #064e3b;
+            --emerald-800: #065f46;
+            --emerald-700: #047857;
+            --emerald-600: #059669;
+            --emerald-500: #10b981;
+            --emerald-400: #34d399;
+            --white: #ffffff;
+            --font-mono: 'JetBrains Mono', monospace;
+            --font-display: 'Orbitron', sans-serif;
+        }
+
+        /* ============================================
+           RESET & BASE
+           ============================================ */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-mono);
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--slate-900) 0%, var(--emerald-950) 50%, var(--slate-900) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* ============================================
+           BACKGROUND GRID 3D
+           ============================================ */
+        .background-grid {
+            position: absolute;
+            inset: 0;
+            opacity: 0.2;
+            overflow: hidden;
+        }
+
+        .background-grid::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(16, 185, 129, 0.3) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(16, 185, 129, 0.3) 1px, transparent 1px);
+            background-size: 50px 50px;
+            transform: perspective(500px) rotateX(60deg);
+            transform-origin: center top;
+        }
+
+        /* ============================================
+           FLOATING ELEMENTS
+           ============================================ */
+        .floating-elements {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        .topo-circle {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            left: 10%;
+            top: 20%;
+        }
+
+        .topo-circle:nth-child(1) { width: 200px; height: 200px; animation: pulse 3s ease-in-out infinite; }
+        .topo-circle:nth-child(2) { width: 300px; height: 300px; animation: pulse 3.5s ease-in-out infinite; }
+        .topo-circle:nth-child(3) { width: 400px; height: 400px; animation: pulse 4s ease-in-out infinite; }
+        .topo-circle:nth-child(4) { width: 500px; height: 500px; animation: pulse 4.5s ease-in-out infinite; }
+        .topo-circle:nth-child(5) { width: 600px; height: 600px; animation: pulse 5s ease-in-out infinite; }
+
+        .floating-icon {
+            position: absolute;
+            color: rgba(52, 211, 153, 0.4);
+        }
+
+        .floating-icon.map-pin {
+            left: 15%;
+            top: 30%;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        .floating-icon.mountain {
+            right: 20%;
+            top: 25%;
+            color: rgba(52, 211, 153, 0.3);
+        }
+
+        .floating-icon.crosshair {
+            left: 80%;
+            bottom: 30%;
+            color: rgba(52, 211, 153, 0.2);
+            animation: spin 10s linear infinite;
+        }
+
+        /* ============================================
+           MAIN CARD CONTAINER
+           ============================================ */
+        .card-container {
+            position: relative;
+            perspective: 1000px;
+        }
+
+        .card-shadow-1 {
+            position: absolute;
+            inset: 0;
+            background: rgba(6, 78, 59, 0.5);
+            border-radius: 1rem;
+            filter: blur(24px);
+            transform: translate3d(0, 0, -50px) scale(1.1);
+            transition: transform 0.3s ease-out;
+        }
+
+        .card-shadow-2 {
+            position: absolute;
+            inset: 0;
+            background: rgba(6, 95, 70, 0.3);
+            border-radius: 1rem;
+            transform: translate3d(0, 0, -25px) scale(1.05);
+            transition: transform 0.3s ease-out;
+        }
+
+        /* ============================================
+           MAIN CARD
+           ============================================ */
+        .login-card {
+            position: relative;
+            width: 420px;
+            max-width: 100%;
+            background: linear-gradient(135deg, 
+                rgba(30, 41, 59, 0.9) 0%, 
+                rgba(30, 41, 59, 0.95) 50%, 
+                rgba(6, 78, 59, 0.9) 100%
+            );
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 1rem;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            overflow: hidden;
+            box-shadow: 
+                0 25px 50px -12px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                0 0 100px rgba(16, 185, 129, 0.2);
+            transition: transform 0.3s ease-out;
+        }
+
+        .login-card:hover {
+            transform: rotateY(2deg) rotateX(-2deg);
+        }
+
+        /* Glowing top border */
+        .glow-border {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--emerald-400), transparent);
+        }
+
+        /* Corner decorations */
+        .corner {
+            position: absolute;
+            width: 2rem;
+            height: 2rem;
+        }
+
+        .corner-tl { top: 1rem; left: 1rem; border-left: 2px solid rgba(16, 185, 129, 0.3); border-top: 2px solid rgba(16, 185, 129, 0.3); }
+        .corner-tr { top: 1rem; right: 1rem; border-right: 2px solid rgba(16, 185, 129, 0.3); border-top: 2px solid rgba(16, 185, 129, 0.3); }
+        .corner-bl { bottom: 1rem; left: 1rem; border-left: 2px solid rgba(16, 185, 129, 0.3); border-bottom: 2px solid rgba(16, 185, 129, 0.3); }
+        .corner-br { bottom: 1rem; right: 1rem; border-right: 2px solid rgba(16, 185, 129, 0.3); border-bottom: 2px solid rgba(16, 185, 129, 0.3); }
+
+        /* ============================================
+           HEADER
+           ============================================ */
+        .card-header {
+            position: relative;
+            padding: 2.5rem 2rem 1.5rem;
+            text-align: center;
+        }
+
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .logo-box {
+            position: relative;
+            width: 5rem;
+            height: 5rem;
+            border-radius: 0.75rem;
+            background: linear-gradient(135deg, var(--emerald-500), var(--emerald-700));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 
+                0 20px 40px -10px rgba(16, 185, 129, 0.5), 
+                inset 0 -4px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .logo-box::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 0.75rem;
+            background: linear-gradient(to top, transparent, rgba(255, 255, 255, 0.2));
+        }
+
+        .logo-box i {
+            color: var(--white);
+            width: 2.5rem;
+            height: 2.5rem;
+        }
+
+        .card-title {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--white);
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 10px rgba(16, 185, 129, 0.5);
+        }
+
+        .card-subtitle {
+            font-family: var(--font-mono);
+            font-size: 0.875rem;
+            color: rgba(52, 211, 153, 0.7);
+        }
+
+        /* ============================================
+           FORM
+           ============================================ */
+        .login-form {
+            padding: 0 2rem 2rem;
+        }
+
+        .form-inner {
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 
+                inset 0 2px 10px rgba(0, 0, 0, 0.3), 
+                inset 0 -1px 0 rgba(255, 255, 255, 0.05);
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-label {
+            display: block;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: rgba(52, 211, 153, 0.8);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .form-input {
+            width: 100%;
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            padding-right: 3rem;
+            font-family: var(--font-mono);
+            font-size: 1rem;
+            color: var(--white);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        .form-input::placeholder {
+            color: var(--slate-500);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--emerald-400);
+            box-shadow: 
+                inset 0 2px 4px rgba(0, 0, 0, 0.2),
+                0 0 0 3px rgba(52, 211, 153, 0.2);
+        }
+
+        .input-indicator {
+            position: absolute;
+            right: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0.5rem;
+            height: 0.5rem;
+            border-radius: 50%;
+            background: rgba(16, 185, 129, 0.5);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: rgba(52, 211, 153, 0.6);
+            cursor: pointer;
+            padding: 0.25rem;
+            transition: color 0.2s ease;
+        }
+
+        .toggle-password:hover {
+            color: var(--emerald-400);
+        }
+
+        .toggle-password i {
+            width: 1.25rem;
+            height: 1.25rem;
+        }
+
+        /* ============================================
+           SUBMIT BUTTON
+           ============================================ */
+        .submit-btn {
+            position: relative;
+            width: 100%;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 0.75rem;
+            font-family: var(--font-display);
+            font-size: 1.125rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--white);
+            background: linear-gradient(135deg, var(--emerald-600), var(--emerald-700));
+            cursor: pointer;
+            overflow: hidden;
+            box-shadow: 
+                0 10px 20px -5px rgba(16, 185, 129, 0.3), 
+                inset 0 -4px 0 rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background: linear-gradient(135deg, var(--emerald-500), var(--emerald-600));
+            transform: translateY(-2px);
+            box-shadow: 
+                0 15px 30px -5px rgba(16, 185, 129, 0.5), 
+                inset 0 -4px 0 rgba(0, 0, 0, 0.2),
+                0 0 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .submit-btn span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-shine {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.5s ease-out;
+        }
+
+        .submit-btn:hover .btn-shine {
+            transform: translateX(100%);
+        }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+        .card-footer {
+            margin-top: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--slate-500);
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-dot {
+            width: 0.5rem;
+            height: 0.5rem;
+            border-radius: 50%;
+            background: var(--emerald-500);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        /* ============================================
+           GROUND REFLECTION
+           ============================================ */
+        .ground-reflection {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 10rem;
+            background: linear-gradient(to top, rgba(16, 185, 129, 0.1), transparent);
+            pointer-events: none;
+        }
+
+        /* ============================================
+           ANIMATIONS
+           ============================================ */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+        @media (max-width: 480px) {
+            .login-card {
+                width: 100%;
+            }
+            
+            .card-header {
+                padding: 2rem 1.5rem 1rem;
+            }
+            
+            .login-form {
+                padding: 0 1.5rem 1.5rem;
+            }
+            
+            .card-title {
+                font-size: 1.25rem;
+            }
+        }

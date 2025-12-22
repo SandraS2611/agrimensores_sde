@@ -1,0 +1,7 @@
+tunnel: agrimensores_sde
+credentials-file: C:\Users\Lohany\.cloudflared\agrimensores_sde.json
+
+ingress:
+  - hostname: subdominio.tudominio.com
+    service: http://localhost:8000
+  - service: http_status:404
