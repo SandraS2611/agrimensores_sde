@@ -26,21 +26,16 @@ router = DefaultRouter()
 router.register(r'planos', PlanoViewSet)
 
 urlpatterns = [
-    # Raíz muestra login.html
     path("", login_view, name="login"),
-
-    # Rutas ofuscadas (HTML)
-    path(f'panel/{LISTA_TOKEN}/', views.lista_planos, name='lista_planos'),
-    path(f'panel/{UPLOAD_TOKEN}/upload/', views.upload_plano, name='upload_plano'),
-    path(f'panel/{DETALLE_TOKEN}/detalle/<int:plano_id>/', views.detalle_plano, name='detalle_plano'),
-    path(f'panel/{LOGOUT_TOKEN}/logout/', LogoutView.as_view(next_page="/"), name="logout"),
-    path(f'panel/{REPROCESAR_TOKEN}/reprocesar/<int:plano_id>/', views.reprocesar_plano, name='reprocesar_plano'),
-    path(f'panel/{DESCARGAR_TOKEN}/descargar-memoria/<int:plano_id>/', views.descargar_memoria, name='descargar_memoria'),
-    path(f'panel/{DESCARGAR_PDF_TOKEN}/descargar-memoria-pdf/<int:plano_id>/', views.descargar_memoria_pdf, name='descargar_memoria_pdf'),
-    path(f'panel/{DRIVE_TOKEN}/subir-drive/<int:plano_id>/', views.subir_memoria_drive, name='subir_memoria_drive'),
-    path(f'panel/{REPORTE_TOKEN}/reporte/<int:plano_id>/', views.ver_reporte, name='ver_reporte'),
-    path(f'panel/{ELIMINAR_TOKEN}/eliminar/<int:plano_id>/', views.eliminar_plano, name='eliminar_plano'),
-
-    # API REST (sin ofuscación, para clientes externos)
-    path('api/', include(router.urls)),
+    path("panel/lista/", views.lista_planos, name="lista_planos"),
+    path("panel/upload/", views.upload_plano, name="upload_plano"),
+    path("panel/detalle/<int:plano_id>/", views.detalle_plano, name="detalle_plano"),
+    path("panel/logout/", LogoutView.as_view(next_page="/"), name="logout"),
+    path("panel/reprocesar/<int:plano_id>/", views.reprocesar_plano, name="reprocesar_plano"),
+    path("panel/descargar-memoria/<int:plano_id>/", views.descargar_memoria, name="descargar_memoria"),
+    path("panel/descargar-memoria-pdf/<int:plano_id>/", views.descargar_memoria_pdf, name="descargar_memoria_pdf"),
+    path("panel/subir-drive/<int:plano_id>/", views.subir_memoria_drive, name="subir_memoria_drive"),
+    path("panel/reporte/<int:plano_id>/", views.ver_reporte, name="ver_reporte"),
+    path("panel/eliminar/<int:plano_id>/", views.eliminar_plano, name="eliminar_plano"),
+    path("api/", include(router.urls)),
 ]
