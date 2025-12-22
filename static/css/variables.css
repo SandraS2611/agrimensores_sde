@@ -1,0 +1,25 @@
+:root {
+    /* Fondo y colores base */
+    --bg-card: #1e1e1e;          /* fondo oscuro */
+    --bg-primary: #ffffff;
+    --text-primary: #e0e0e0;
+    --text-secondary: #b0b0b0;
+    --text-muted: #888888;
+
+    /* Colores de acento */
+    --accent-primary: #00d4ff;
+    --accent-secondary: #0099cc;
+
+    /* Bordes */
+    --border-color: #333333;
+    --border-subtle: #444444;
+
+    /* Estados */
+    --success: #00ff88;
+    --warning: #ffaa00;
+    --error: #ff4466;
+
+    /* Tipografías */
+    --font-display: 'Poppins', sans-serif;
+    --font-mono: 'Fira Code', monospace;
+}
