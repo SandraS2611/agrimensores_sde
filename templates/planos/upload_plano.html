@@ -10,17 +10,16 @@
 {% block content %}
 <div class="upload-page">
   <div class="grid-decoration"></div>
-    <div class="upload-container">
-    <!-- 3D Shadow layers -->
+  <div class="upload-container">
+    <!-- Sombras 3D -->
     <div class="shadow-layer shadow-layer-1"></div>
     <div class="shadow-layer shadow-layer-2"></div>
     <div class="shadow-layer shadow-layer-3"></div>
     
-    <!-- Main card -->
+    <!-- Tarjeta principal -->
     <div class="upload-card">
       <!-- Header -->
       <div class="upload-header">
-
         <h2>Cargar Plano de Mensura</h2>
         <p>Suba su archivo PDF para procesamiento</p>
       </div>
@@ -70,13 +69,10 @@
           <span>Subir y Procesar Plano</span>
         </button>
       </form>
-
     </div>
   </div>
   <a href="{% url 'lista_planos' %}" class="back-link">← Volver al Dashboard</a>
-
 </div>
 
 <script src="{% static 'js/upload_plano.js' %}"></script>
-
 {% endblock %}
