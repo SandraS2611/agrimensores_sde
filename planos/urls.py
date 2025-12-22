@@ -5,25 +5,12 @@ from . import views
 from rest_framework.routers import DefaultRouter
 from .api import PlanoViewSet
 from .views import login_view
+from django.conf import settings
+from django.conf.urls.static import static
 
-# Generamos tokens aleatorios al iniciar el servidor
-def random_token():
-    return uuid.uuid4().hex[:8]
-
-LISTA_TOKEN = random_token()
-UPLOAD_TOKEN = random_token()
-DETALLE_TOKEN = random_token()
-LOGOUT_TOKEN = random_token()
-REPROCESAR_TOKEN = random_token()
-DESCARGAR_TOKEN = random_token()
-DESCARGAR_PDF_TOKEN = random_token()
-DRIVE_TOKEN = random_token()
-REPORTE_TOKEN = random_token()
-ELIMINAR_TOKEN = random_token()
-
-# Router para la API REST
+# Instanciamos el router y registramos el ViewSet
 router = DefaultRouter()
-router.register(r'planos', PlanoViewSet)
+router.register(r'planos', PlanoViewSet, basename='plano')
 
 urlpatterns = [
     path("", login_view, name="login"),
@@ -39,3 +26,7 @@ urlpatterns = [
     path("panel/eliminar/<int:plano_id>/", views.eliminar_plano, name="eliminar_plano"),
     path("api/", include(router.urls)),
 ]
+
+# Solo en desarrollo: servir archivos media
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
