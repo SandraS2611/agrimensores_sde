@@ -85,7 +85,7 @@
 
         .floating-icon {
             position: absolute;
-            color: rgba(52, 211, 153, 0.4);
+            color: rgba(243, 247, 246, 0.4);
         }
 
         .floating-icon.map-pin {
@@ -97,13 +97,13 @@
         .floating-icon.mountain {
             right: 20%;
             top: 25%;
-            color: rgba(52, 211, 153, 0.3);
+            color: rgba(243, 247, 246, 0.4);
         }
 
         .floating-icon.crosshair {
             left: 80%;
             bottom: 30%;
-            color: rgba(52, 211, 153, 0.2);
+            color: rgba(243, 247, 246, 0.4);
             animation: spin 10s linear infinite;
         }
 
@@ -141,11 +141,12 @@
             position: relative;
             width: 420px;
             max-width: 100%;
-            background: linear-gradient(135deg, 
-                rgba(30, 41, 59, 0.9) 0%, 
-                rgba(30, 41, 59, 0.95) 50%, 
-                rgba(6, 78, 59, 0.9) 100%
-            );
+            background: 
+            linear-gradient(135deg, 
+                rgba(6, 17, 10, 0.9) 0%, 
+                rgba(13, 14, 6, 0.95) 50%, 
+                rgba(118, 214, 189, 0.9) 100% 
+                );
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-radius: 1rem;
@@ -199,7 +200,7 @@
             margin-bottom: 1.5rem;
         }
 
-        .logo-box {
+        /* .logo-box {
             position: relative;
             width: 5rem;
             height: 5rem;
@@ -211,21 +212,36 @@
             box-shadow: 
                 0 20px 40px -10px rgba(16, 185, 129, 0.5), 
                 inset 0 -4px 0 rgba(0, 0, 0, 0.2);
-        }
+        } */
 
-        .logo-box::after {
+        /* .logo-box::after {
             content: '';
             position: absolute;
             inset: 0;
             border-radius: 0.75rem;
             background: linear-gradient(to top, transparent, rgba(255, 255, 255, 0.2));
-        }
+        } */
 
-        .logo-box i {
-            color: var(--white);
-            width: 2.5rem;
-            height: 2.5rem;
-        }
+        .logo-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 30%;
+            /*
+            background-color: #0f172a;  fondo institucional oscuro */
+            padding: 0.5rem; /* opcional: da aire sin achicar demasiado */
+        }   
+
+        /* .logo-box {
+            width: 10rem;
+            height: 10rem;
+            border-radius: 0;
+            overflow: hidden;
+            background-color: #cfd8ee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        } */
 
         .card-title {
             font-family: var(--font-display);
@@ -239,7 +255,7 @@
         .card-subtitle {
             font-family: var(--font-mono);
             font-size: 0.875rem;
-            color: rgba(52, 211, 153, 0.7);
+            color: rgba(239, 250, 246, 0.7);
         }
 
         /* ============================================
@@ -272,7 +288,7 @@
             font-family: var(--font-mono);
             font-size: 0.75rem;
             font-weight: 500;
-            color: rgba(52, 211, 153, 0.8);
+            color: rgba(240, 248, 245, 0.8);
             text-transform: uppercase;
             letter-spacing: 0.1em;
             margin-bottom: 0.5rem;
@@ -316,7 +332,7 @@
             width: 0.5rem;
             height: 0.5rem;
             border-radius: 50%;
-            background: rgba(16, 185, 129, 0.5);
+            background: rgba(214, 233, 227, 0.5);
             animation: pulse 2s ease-in-out infinite;
         }
 
@@ -327,7 +343,7 @@
             transform: translateY(-50%);
             background: none;
             border: none;
-            color: rgba(52, 211, 153, 0.6);
+            color: rgba(227, 240, 235, 0.6);
             cursor: pointer;
             padding: 0.25rem;
             transition: color 0.2s ease;

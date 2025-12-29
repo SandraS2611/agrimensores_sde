@@ -12,6 +12,13 @@ from .decorators import superuser_required
 from .services import procesar_pdf
 from django.http import HttpResponse
 
+from django.http import JsonResponse
+from planos.utils.pdf_processor import PDFProcessor
+# generar_memoria
+
+from planos.utils.ia_memoria import generar_memoria_gemini
+from docx import Document
+
 logger = logging.getLogger(__name__)
 
 def login_view(request):
@@ -81,12 +88,21 @@ def lista_planos(request):
     planos = Plano.objects.all().order_by('-fecha_carga')
     return render(request, 'planos/lista_planos.html', {'planos': planos})
 
-
 @superuser_required
 def detalle_plano(request, plano_id):
-    """Vista para ver detalle de un plano"""
     plano = get_object_or_404(Plano, id=plano_id)
-    return render(request, 'planos/detalle_plano.html', {'plano': plano})
+
+    # Como es JSONField, ya viene como dict
+    memoria_preview = plano.datos_procesados if plano.datos_procesados else None
+
+    return render(
+        request,
+        'planos/detalle_plano.html',
+        {
+            'plano': plano,
+            'memoria_preview': memoria_preview
+        }
+    )
 
 @superuser_required
 def descargar_memoria(request, plano_id):
@@ -186,3 +202,85 @@ def eliminar_plano(request, plano_id):
     plano.delete()
     messages.success(request, f'Plano "{titulo}" eliminado correctamente.')
     return redirect('lista_planos')
+
+# @superuser_required
+# def generar_memoria_preview(request, plano_id):
+#     plano = Plano.objects.get(id=plano_id)
+#     processor = PDFProcessor(plano.archivo_pdf.path)
+#     datos = processor.extract_data()
+#     memoria_texto = generar_memoria(datos)
+#     return JsonResponse({"memoria": memoria_texto})
+
+@superuser_required
+def generar_memoria_preview(request, plano_id):  # noqa: F811
+    plano = Plano.objects.get(id=plano_id)
+    processor = PDFProcessor(plano.archivo_pdf.path)
+    datos = processor.extract_data()
+
+    memoria_texto = generar_memoria_gemini(datos)
+
+    return JsonResponse({"memoria": memoria_texto})
+
+@superuser_required
+def descargar_memoria_gemini(request, plano_id):
+    plano = Plano.objects.get(id=plano_id)
+    processor = PDFProcessor(plano.archivo_pdf.path)
+    datos = processor.extract_data()
+
+    # Texto narrativo generado por Gemini
+    memoria_texto = generar_memoria_gemini(datos)
+
+    # Crear documento Word
+    doc = Document()
+    doc.add_heading("Memoria Descriptiva", level=1)
+    doc.add_paragraph(memoria_texto)
+
+    # Tabla de superficies
+    if datos.get("superficies"):
+        doc.add_heading("Planilla de Superficies", level=2)
+        table = doc.add_table(rows=1, cols=5)
+        hdr_cells = table.rows[0].cells
+        hdr_cells[0].text = "Lote"
+        hdr_cells[1].text = "Sup. s/Título"
+        hdr_cells[2].text = "Sup. s/Mensura"
+        hdr_cells[3].text = "Diferencia"
+        hdr_cells[4].text = "Observaciones"
+        for sup in datos["superficies"]:
+            row_cells = table.add_row().cells
+            row_cells[0].text = sup.get("designacion", "")
+            row_cells[1].text = sup.get("sup_titulo", "")
+            row_cells[2].text = sup.get("sup_mensura", "")
+            row_cells[3].text = sup.get("diferencia", "")
+            row_cells[4].text = sup.get("observaciones", "")
+
+    # Tabla de coordenadas
+    if datos.get("coordenadas"):
+        doc.add_heading("Coordenadas Geodésicas POSGAR 07", level=2)
+        table = doc.add_table(rows=1, cols=6)
+        hdr_cells = table.rows[0].cells
+        hdr_cells[0].text = "Punto"
+        hdr_cells[1].text = "Latitud"
+        hdr_cells[2].text = "Longitud"
+        hdr_cells[3].text = "Norte GK"
+        hdr_cells[4].text = "Este GK"
+        hdr_cells[5].text = "Observación"
+        for c in datos["coordenadas"]:
+            row_cells = table.add_row().cells
+            row_cells[0].text = c.get("punto", "")
+            row_cells[1].text = c.get("latitud", "")
+            row_cells[2].text = c.get("longitud", "")
+            row_cells[3].text = c.get("norte_gk", "")
+            row_cells[4].text = c.get("este_gk", "")
+            row_cells[5].text = c.get("observacion", "")
+
+    # Notas y referencias
+    doc.add_heading("Notas y Referencias", level=2)
+    doc.add_paragraph(f"Nota 1: {datos.get('nota1', '')}")
+    doc.add_paragraph(f"Nota 2: {datos.get('nota2', '')}")
+    doc.add_paragraph(f"Referencias: {datos.get('referencias', '')}")
+
+    # Exportar como DOCX
+    response = HttpResponse(content_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+    response["Content-Disposition"] = f'attachment; filename="memoria_{plano_id}.docx"'
+    doc.save(response)
+    return response

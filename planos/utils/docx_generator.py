@@ -1,5 +1,5 @@
 """
-Generador de Memorias Descriptivas en Word con formato oficial para proyectos de construcción.
+Generador de Memorias Descriptivas en Word con formato oficial para proyectos de mensura.
 """
 
 import os
@@ -13,7 +13,7 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH
 logger = logging.getLogger(__name__)
 
 class DocxGenerator:
-    """Genera memoria descriptiva con formato oficial (Documento 23 adaptado)"""
+    """Genera memoria descriptiva con formato oficial"""
 
     def __init__(self, plano):
         self.plano = plano
@@ -57,6 +57,40 @@ class DocxGenerator:
             return "No especificado"
         return ", ".join(nombres[:3]) + (" entre otros" if len(nombres) > 3 else "")
 
+    def _dedupe_lados(self, lados):
+        """Deduplica lados por (lado, medida) y mantiene el primero"""
+        seen = set()
+        result = []
+        for lado_item in lados or []:
+            if not isinstance(lado_item, dict):
+                continue
+            key = (
+                str(lado_item.get("lado", "")).strip(),
+                str(lado_item.get("mide", "")).strip()
+            )
+            if key in seen:
+                continue
+            seen.add(key)
+            result.append(lado_item)
+        return result
+
+    def _normalize_refs(self, referencias):
+        """Normaliza referencias a lista de strings sin duplicados"""
+        if not referencias:
+            return []
+        if isinstance(referencias, str):
+            refs = [r.strip() for r in referencias.split("\n") if r.strip()]
+        elif isinstance(referencias, list):
+            refs = [str(r).strip() for r in referencias if str(r).strip()]
+        else:
+            refs = [str(referencias).strip()]
+        dedup, seen = [], set()
+        for r in refs:
+            if r not in seen:
+                seen.add(r)
+                dedup.append(r)
+        return dedup
+
     # -------------------------
     # Tablas
     # -------------------------
@@ -82,25 +116,31 @@ class DocxGenerator:
                 row_cells = table.add_row().cells
                 if isinstance(sup, dict):
                     row_cells[0].text = sup.get("designacion", "No especificado")
-                    row_cells[1].text = sup.get("valor", "No especificado")
-                    row_cells[2].text = sup.get("observaciones", "No especificado")
+                    st = sup.get("sup_titulo")
+                    sm = sup.get("sup_mensura")
+                    dif = sup.get("diferencia")
+                    partes = [p for p in [st, sm, dif] if p and p != "No especificado"]
+                    valor = " / ".join(partes) if partes else "No especificado"
+                    row_cells[1].text = valor
+                    row_cells[2].text = sup.get("observaciones", "") or " "
                 else:
                     row_cells[0].text = "No especificado"
                     row_cells[1].text = str(sup)
-                    row_cells[2].text = "No especificado"
+                    row_cells[2].text = " "
         else:
             row_cells = table.add_row().cells
             row_cells[0].text = row_cells[1].text = row_cells[2].text = "No especificado"
 
-        doc.add_paragraph(
-            "(Nota: Los valores exactos de cada superficie deben transcribirse de la Planilla de Superficies del plano)"
-        )
+        nota = "(Nota: Los valores exactos de cada superficie deben transcribirse de la Planilla de Superficies del plano)"
+        doc.add_paragraph(nota)
 
     def _add_table_lados(self, doc):
         h = doc.add_paragraph("4. PLANILLA DE LADOS")
         h.runs[0].bold = True
 
-        lados = self.datos.get("lados", [])
+        lados_raw = self.datos.get("lados", [])
+        lados = self._dedupe_lados(lados_raw)
+
         table = doc.add_table(rows=1, cols=6)
         table.style = "Table Grid"
         hdr = table.rows[0].cells
@@ -119,23 +159,18 @@ class DocxGenerator:
         if lados:
             for lado in lados:
                 row = table.add_row().cells
-                if isinstance(lado, dict):
-                    row[0].text = str(lado.get("vertice", "No especificado"))
-                    row[1].text = str(lado.get("rumbo", "No especificado"))
-                    row[2].text = str(lado.get("lado", "No especificado"))
-                    row[3].text = str(lado.get("mide", "No especificado"))
-                    row[4].text = str(lado.get("angulo", "No especificado"))
-                    row[5].text = str(lado.get("linderos", "No especificado"))
-                else:
-                    for i in range(6):
-                        row[i].text = "No especificado"
+                row[0].text = str(lado.get("vertice", "")) or "—"
+                row[1].text = str(lado.get("rumbo", "")) or "—"
+                row[2].text = str(lado.get("lado", "")) or "—"
+                row[3].text = str(lado.get("mide", "")) or "—"
+                row[4].text = str(lado.get("angulo", "")) or "—"
+                row[5].text = str(lado.get("linderos", "")) or "—"
         else:
             row = table.add_row().cells
             for i in range(6):
                 row[i].text = "No especificado"
 
-    def _add_table_coordenadas(self, doc):  # noqa: F811
-        """Tabla opcional de coordenadas si existen en datos_procesados"""
+    def _add_table_coordenadas(self, doc):
         coords = self.datos.get("coordenadas", [])
         if not coords:
             return
@@ -152,11 +187,11 @@ class DocxGenerator:
                 cell.paragraphs[0].runs[0].bold = True
         for c in coords:
             row = table.add_row().cells
-            row[0].text = str(c.get("punto", ""))
-            row[1].text = str(c.get("latitud", ""))
-            row[2].text = str(c.get("longitud", ""))
-            row[3].text = str(c.get("norte_gk", ""))
-            row[4].text = str(c.get("este_gk", ""))
+            row[0].text = str(c.get("punto", "")) or "—"
+            row[1].text = str(c.get("latitud", "")) or "—"
+            row[2].text = str(c.get("longitud", "")) or "—"
+            row[3].text = str(c.get("norte_gk", "")) or "—"
+            row[4].text = str(c.get("este_gk", "")) or "—"
 
     # -------------------------
     # Generación principal
@@ -184,18 +219,15 @@ class DocxGenerator:
             run_t.bold = True
             run_t.font.size = Pt(12)
 
-            # Fecha de generación (extra)
+            # Fecha de generación
             doc.add_paragraph(f"Documento generado el {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}")
 
             # Cabecera
-            self._add_styled_paragraph(
-                doc, "DEPARTAMENTO", self.datos.get("departamento", "No especificado")
-            )
+            self._add_styled_paragraph(doc, "DEPARTAMENTO", self.datos.get("departamento", "No especificado"))
             padrones = ", ".join(self.datos.get("padrones", [])).strip() or "No especificado"
             self._add_styled_paragraph(doc, "PADRON", padrones)
             self._add_styled_paragraph(doc, "LUGAR", self.datos.get("lugar", "No especificado"))
             self._add_styled_paragraph(doc, "DOMINIO", self._format_dominios())
-            # Baricentro (si lo tenés)
             if self.datos.get("baricentro"):
                 self._add_styled_paragraph(doc, "BARICENTRO GEOGRÁFICO", self.datos.get("baricentro"))
             self._add_styled_paragraph(doc, "OBJETO", self.datos.get("objeto", "No especificado"))
@@ -209,15 +241,21 @@ class DocxGenerator:
             h1.runs[0].bold = True
             doc.add_paragraph(f"Dominio: {self._format_dominios()}")
             doc.add_paragraph(f"Inmueble: {self.datos.get('inmueble', 'No especificado')}")
-            # Si tu procesamiento trae un resumen de linderos y medidas:
             medidas_linderos = self.datos.get("medidas_linderos") or "Según plano de mensura."
             doc.add_paragraph(f"Medidas y Linderos: {medidas_linderos}")
 
             # Sección 2: Descripción de las Operaciones
             h2 = doc.add_paragraph("2. DESCRIPCIÓN DE LAS OPERACIONES")
             h2.runs[0].bold = True
-            descripcion = self.datos.get("descripcion") or "No especificado"
-            doc.add_paragraph(descripcion)
+            descripcion = (self.datos.get("descripcion") or "").strip()
+            if descripcion:
+                doc.add_paragraph(descripcion)
+            nota1 = (self.datos.get("nota1") or "").strip()
+            nota2 = (self.datos.get("nota2") or "").strip()
+            if nota1:
+                doc.add_paragraph(f"Nota 1: {nota1}")
+            if nota2:
+                doc.add_paragraph(f"Nota 2: {nota2}")
 
             # Sección 3: Planilla de Superficies
             self._add_table_superficies(doc)
@@ -226,16 +264,23 @@ class DocxGenerator:
             self._add_table_lados(doc)
 
             # Sección 5: Croquis y Referencias
-            h4 = doc.add_paragraph("5. CROQUIS Y REFERENCIAS")
-            h4.runs[0].bold = True
-            croquis = self.datos.get("croquis") or "No especificado"
-            doc.add_paragraph(croquis)
+            h5 = doc.add_paragraph("5. CROQUIS Y REFERENCIAS")
+            h5.runs[0].bold = True
+            referencias = self._normalize_refs(self.datos.get("referencias"))
+            croquis_text = (self.datos.get("croquis") or "").strip()
+            if referencias:
+                doc.add_paragraph("Referencias:")
+                for ref in referencias:
+                    doc.add_paragraph(ref, style="List Bullet")
+            if croquis_text:
+                doc.add_paragraph(croquis_text)
 
             # Sección 6: Texto completo (opcional para auditoría)
-            if self.datos.get("texto_completo"):
-                h5 = doc.add_paragraph("6. TEXTO COMPLETO (EXTRAÍDO DEL PDF)")
-                h5.runs[0].bold = True
-                doc.add_paragraph(self.datos["texto_completo"])
+            texto_completo = self.datos.get("texto_completo")
+            if texto_completo:
+                h6 = doc.add_paragraph("6. TEXTO COMPLETO (EXTRAÍDO DEL PDF)")
+                h6.runs[0].bold = True
+                doc.add_paragraph(texto_completo)
 
             # Sección 7: Coordenadas (si existen)
             self._add_table_coordenadas(doc)
@@ -248,10 +293,11 @@ class DocxGenerator:
             # Pie institucional
             section = doc.sections[0]
             footer = section.footer
+            # Limpia footer y agrega texto institucional
             if footer.paragraphs:
-                footer.paragraphs[0].text = "Agrimensores SDE - Santiago del Estero"
-            else:
-                footer.add_paragraph("Agrimensores SDE - Santiago del Estero")
+                for p in footer.paragraphs:
+                    p.text = ""
+            footer.add_paragraph("Agrimensores SDE - Santiago del Estero")
 
             # Guardar
             outputs_dir = os.path.join(settings.MEDIA_ROOT, "outputs", "memorias")

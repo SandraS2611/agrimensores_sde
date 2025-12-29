@@ -1,128 +1,132 @@
-{% extends "base.html" %}
-{% load static %}
-
-{% block title %}{{ plano.titulo }} Estudio Agrimensor {% endblock %}
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/detalle_plano.css' %}">
-{% endblock %}
-
-{% block content %}
+{% extends "base.html" %} {% load static %} {% block title %}{{ plano.titulo }}
+Estudio Agrimensor {% endblock %} {% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/detalle_plano.css' %}" />
+{% endblock %} {% block content %}
 <div class="container">
-    <a href="{% url 'lista_planos' %}" class="back-button">
-         Volver a la lista
-    </a>
-    
-    <div class="card">
-        <div class="header">
-            <h1>{{ plano.titulo }}</h1>
-            <span class="estado-badge estado-{{ plano.estado }}">
-                {% if plano.estado == 'pendiente' %} Pendiente de procesamiento
-                {% elif plano.estado == 'procesando' %} Procesando...
-                {% elif plano.estado == 'completado' %} Procesamiento completado
-                {% elif plano.estado == 'error' %} Error en el procesamiento
-                {% endif %}
-            </span>
-        </div>
-        
-        <!-- Información básica -->
-        <div class="info-section">
-            <h2>Información General</h2>
-            
-            <div class="info-row">
-                <div class="info-label">Fecha de carga:</div>
-                <div class="info-value">{{ plano.fecha_carga|date:"d/m/Y H:i:s" }}</div>
-            </div>
-            
-            <div class="info-row">
-                <div class="info-label">Última actualización:</div>
-                <div class="info-value">{{ plano.fecha_actualizacion|date:"d/m/Y H:i:s" }}</div>
-            </div>
-            
-            {% if plano.usuario %}
-            <div class="info-row">
-                <div class="info-label">Usuario:</div>
-                <div class="info-value">{{ plano.usuario.username }} ({{ plano.usuario.email }})</div>
-            </div>
-            {% endif %}
-            
-            <div class="info-row">
-                <div class="info-label">Archivo PDF:</div>
-                <div class="info-value">{{ plano.archivo_pdf.name }}</div>
-            </div>
-            
-            {% if plano.descripcion %}
-            <div class="info-row">
-                <div class="info-label">Descripción:</div>
-                <div class="info-value">{{ plano.descripcion }}</div>
-            </div>
-            {% endif %}
-        </div>
-        
-        <!-- Texto extraído -->
-        {% if plano.texto_extraido %}
-        <div class="info-section">
-            <h2>Texto Extraído del PDF</h2>
-            <div class="texto-extraido">{{ plano.texto_extraido }}</div>
-        </div>
-        {% else %}
-        <div class="alert alert-info">
-             El texto aún no ha sido extraído del PDF. El procesamiento puede estar en curso.
-        </div>
-        {% endif %}
-        
-        <!-- Datos procesados -->
-        {% if plano.datos_procesados %}
-        <div class="info-section">
-            <h2>Datos Procesados</h2>
-            <div class="datos-json">{{ plano.datos_procesados|safe }}</div>
-        </div>
-        {% endif %}
-        
-        <!-- Estado de procesamiento -->
-        {% if plano.estado == 'procesando' %}
-        <div class="alert alert-info">
-             El plano está siendo procesado en segundo plano. Esta página se actualizará automáticamente.
-        </div>
-        {% elif plano.estado == 'error' %}
-        <div class="alert alert-warning">
-             Hubo un error al procesar este plano. Por favor, intenta cargarlo nuevamente o contacta al administrador.
-        </div>
-        {% endif %}
-        
-        <!-- Acciones -->
-        <div class="actions">
-            <a href="{{ plano.archivo_pdf.url }}" target="_blank" class="btn btn-primary">
-                 Ver PDF Original
-            </a>
-            
-            {% if plano.estado == 'completado' %}
-            <a href="{% url 'descargar_memoria' plano.id %}" class="btn btn-success">
-                 Generar Memoria Descriptiva
-            </a>
-            <a href="{% url 'ver_reporte' plano.id %}" class="btn btn-secondary">
-                 Ver Reporte de Cumplimiento
-            </a>
-            {% endif %}
-            
-            {% if plano.estado == 'error' or plano.estado == 'pendiente' %}
-            <a href="{% url 'reprocesar_plano' plano.id %}" class="btn btn-primary">
-                 Reprocesar Plano
-            </a>
-            {% endif %}
-            
-            <a href="{% url 'eliminar_plano' plano.id %}" class="btn btn-danger" onclick="return confirm('¿Estás seguro de eliminar este plano?')">
-                 Eliminar Plano
-            </a>
-        </div>
+  <a href="{% url 'lista_planos' %}" class="back-button">Volver a la lista</a>
+
+  <div class="card">
+    <div class="header">
+      <h1>{{ plano.titulo }}</h1>
+      <span class="estado-badge estado-{{ plano.estado }}">
+        {% if plano.estado == 'pendiente' %} Pendiente de procesamiento {% elif
+        plano.estado == 'procesando' %} Procesando... {% elif plano.estado ==
+        'completado' %} Procesamiento completado {% elif plano.estado == 'error'
+        %} Error en el procesamiento {% endif %}
+      </span>
     </div>
+
+    <!-- Información básica -->
+    <div class="info-section">
+      <h2>Información General</h2>
+      <div class="info-row">
+        <div class="info-label">Fecha de carga:</div>
+        <div class="info-value">{{ plano.fecha_carga|date:"d/m/Y H:i:s" }}</div>
+      </div>
+      <div class="info-row">
+        <div class="info-label">Última actualización:</div>
+        <div class="info-value">
+          {{ plano.fecha_actualizacion|date:"d/m/Y H:i:s" }}
+        </div>
+      </div>
+      {% if plano.usuario %}
+      <div class="info-row">
+        <div class="info-label">Usuario:</div>
+        <div class="info-value">
+          {{ plano.usuario.username }} ({{ plano.usuario.email }})
+        </div>
+      </div>
+      {% endif %}
+      <div class="info-row">
+        <div class="info-label">Archivo PDF:</div>
+        <div class="info-value">{{ plano.archivo_pdf.name }}</div>
+      </div>
+      {% if plano.descripcion %}
+      <div class="info-row">
+        <div class="info-label">Descripción:</div>
+        <div class="info-value">{{ plano.descripcion }}</div>
+      </div>
+      {% endif %}
+    </div>
+
+    <div
+      id="memoria-preview-container"
+      class="info-section memoria-preview"
+      style="display: none"
+    >
+      <h2>Previsualización de Memoria Descriptiva (IA)</h2>
+      <div class="robot-progress" id="robot-progress" style="display:none;">
+        <img src="{% static 'img/robot.png' %}" alt="Robot agrimensor" class="robot-animacion" />
+        <div class="progress-bar"></div>
+      </div>
+
+      <div id="memoria-preview-content"></div>
+      <script>
+        const planoId = {{ plano.id }};
+      </script>
+
+      <button
+        id="btn-confirmar-descarga"
+        class="btn btn-success"
+        style="display: none"
+      >
+        Confirmar y Descargar
+      </button>
+    </div>
+
+    <!-- Estado de procesamiento -->
+    {% if plano.estado == 'procesando' %}
+    <div class="alert alert-info">
+      El plano está siendo procesado en segundo plano. Esta página se
+      actualizará automáticamente.
+    </div>
+    {% elif plano.estado == 'error' %}
+    <div class="alert alert-warning">
+      Hubo un error al procesar este plano. Por favor, intenta cargarlo
+      nuevamente o contacta al administrador.
+    </div>
+    {% endif %}
+
+    <!-- Acciones -->
+    <div class="actions">
+      <a
+        href="{{ plano.archivo_pdf.url }}"
+        target="_blank"
+        class="btn btn-primary"
+        >Ver PDF Original</a
+      >
+
+      {% if plano.estado == 'completado' %}
+      <!-- Nuevo botón para generar previa con IA -->
+      <button id="btn-generar-memoria" class="btn btn-info">
+        Generar Memoria con IA
+      </button>
+      
+      <a href="{% url 'ver_reporte' plano.id %}" class="btn btn-secondary"
+        >Ver Reporte de Cumplimiento</a
+      >
+      {% endif %} {% if plano.estado == 'error' or plano.estado == 'pendiente'%}
+      <a href="{% url 'reprocesar_plano' plano.id %}" class="btn btn-primary"
+        >Reprocesar Plano</a
+      >
+      {% endif %}
+
+      <a
+        href="{% url 'eliminar_plano' plano.id %}"
+        class="btn btn-danger"
+        onclick="return confirm('¿Estás seguro de eliminar este plano?')"
+        >Eliminar Plano</a
+      >
+    </div>
+  </div>
 </div>
 
 {% if plano.estado == 'procesando' %}
 <script>
-    // Auto-refresh cada 5 segundos si está procesando
-    setTimeout(function() {
-        location.reload();
-    }, 5000);
+  const planoId = {{ plano.id }};
+  window.planoEstado = "{{ plano.estado }}";
 </script>
 {% endif %}
+
+<script src="{% static 'js/detalle_plano.js' %}"></script>
 {% endblock %}

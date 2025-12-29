@@ -3,6 +3,15 @@ from pathlib import Path
 from decouple import config
 import dj_database_url
 
+import os
+from dotenv import load_dotenv
+
+# Cargar variables desde .env
+load_dotenv()
+
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # ====================
@@ -10,7 +19,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # ====================
 SECRET_KEY = config('SECRET_KEY', default='django-insecure-key')
 DEBUG = config('DEBUG', default=False, cast=bool)
-ALLOWED_HOSTS = [ "localhost", "127.0.0.1", ".onrender.com" ]
+ALLOWED_HOSTS = [ "localhost", "127.0.0.1", ".ngrok-free.dev"]
 
 # ====================
 # APLICACIONES
@@ -158,3 +167,8 @@ LOGGING = {
 }
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# ====================
+# VARIABLES DE ENTORNO
+# ====================
+GOOGLE_API_KEY = "<tu_api_key>"

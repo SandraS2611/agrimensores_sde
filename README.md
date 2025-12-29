@@ -107,3 +107,9 @@ Equipo de soporte técnico y colaboradores: Yenina Barrera
 📜 Licencia
 Este proyecto está bajo la licencia MIT. Puedes usarlo, modificarlo y distribuirlo libremente.
 
+C:\ngrok\ngrok.exe config add-authtoken TU_AUTHTOKEN
+
+python manage.py runserver 8000
+
+C:\ngrok\ngrok.exe http 8000
+

@@ -24,6 +24,8 @@ urlpatterns = [
     path("panel/reporte/<int:plano_id>/", views.ver_reporte, name="ver_reporte"),
     path("panel/eliminar/<int:plano_id>/", views.eliminar_plano, name="eliminar_plano"),
     path("api/", include(router.urls)),
+    path("panel/generar_memoria/<int:plano_id>/", views.generar_memoria_preview, name="generar_memoria_preview"),
+    path("panel/descargar_memoria/<int:plano_id>/", views.descargar_memoria_gemini, name="descargar_memoria_gemini"),
 ]
 
 # Solo en desarrollo: servir archivos media
