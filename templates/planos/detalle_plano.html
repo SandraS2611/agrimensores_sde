@@ -55,10 +55,15 @@ Estudio Agrimensor {% endblock %} {% block extra_css %}
       style="display: none"
     >
       <h2>Previsualización de Memoria Descriptiva (IA)</h2>
+     
       <div class="robot-progress" id="robot-progress" style="display:none;">
-        <img src="{% static 'img/robot.png' %}" alt="Robot agrimensor" class="robot-animacion" />
+        <div class="robot-wrapper">
+          <img src="{% static 'img/robot.png' %}" alt="Robot agrimensor" class="robot-animacion" />
+          <div class="color-overlay"></div>
+        </div>
         <div class="progress-bar"></div>
       </div>
+
 
       <div id="memoria-preview-content"></div>
       <script>

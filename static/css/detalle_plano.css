@@ -189,3 +189,29 @@ body {
   50%  { transform: scale(1.02); }
   100% { transform: scale(1); }
 }
+
+.robot-wrapper {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.robot-animacion {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: grayscale(100%); /* arranca gris */
+}
+
+.color-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 0%; /* se irá expandiendo */
+  background: linear-gradient(to bottom, #4caf50, #2e7d32);
+  mix-blend-mode: multiply; /* se mezcla con la imagen */
+  transition: height 0.2s linear;
+}
